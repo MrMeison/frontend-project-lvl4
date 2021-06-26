@@ -2,7 +2,10 @@
   "name": "@hexlet/code",
   "version": "0.0.1",
   "description": "",
-  "main": "server/index.js",
+  "main": "src/init.jsx",
+  "bin": {
+    "slack": "bin/slack.js"
+  },
   "type": "module",
   "engines": {
     "node": "14.x"
@@ -21,7 +24,8 @@
   "license": "ISC",
   "homepage": "",
   "dependencies": {
-    "bootstrap": "^4.6.0",
+    "@reduxjs/toolkit": "^1.6.0",
+    "bootstrap": "^5.0.1",
     "core-js": "^3.12.1",
     "debug": "^4.3.1",
     "fastify": "^3.15.1",
@@ -31,13 +35,21 @@
     "fastify-sensible": "^3.1.1",
     "fastify-socket.io": "^2.0.0",
     "fastify-static": "^4.0.1",
+    "formik": "^2.2.9",
     "http-errors": "^1.8.0",
+    "i18next": "^20.3.2",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "pino-pretty": "^4.8.0",
     "point-of-view": "^4.14.0",
     "popper.js": "^1.16.1",
     "pug": "^3.0.2",
+    "react": "^17.0.2",
+    "react-bootstrap": "^1.6.1",
+    "react-dom": "^17.0.2",
+    "react-i18next": "^11.11.0",
+    "react-redux": "^7.2.4",
+    "react-router-dom": "^5.2.0",
     "regenerator-runtime": "^0.13.7"
   },
   "devDependencies": {
@@ -64,6 +76,7 @@
     "postcss-preset-env": "^6.7.0",
     "sass-loader": "^11.1.0",
     "style-loader": "^2.0.0",
+    "url-loader": "^4.1.1",
     "webpack": "^5.37.0",
     "webpack-cli": "^4.7.0",
     "webpack-dev-server": "^3.11.2"
