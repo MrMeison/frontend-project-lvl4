@@ -7,21 +7,25 @@ import LoginPage from './LoginPage.jsx';
 import ChatPage from './ChatPage.jsx';
 import routes from '../routes';
 import Navbar from './Navbar.jsx';
+import AuthProvider from './AuthProvider.jsx';
+import PrivateRoute from './PrivateRoute.jsx';
 
 const App = () => (
-  <Router>
-    <div className="d-flex flex-column h-100">
-      <Navbar />
-      <Switch>
-        <Route path={routes.loginPagePath()}>
-          <LoginPage />
-        </Route>
-        <Route path={routes.homePagePath()} exact>
-          <ChatPage />
-        </Route>
-      </Switch>
-    </div>
-  </Router>
+  <AuthProvider>
+    <Router>
+      <div className="d-flex flex-column h-100">
+        <Navbar />
+        <Switch>
+          <Route path={routes.loginPagePath()}>
+            <LoginPage />
+          </Route>
+          <PrivateRoute path={routes.chatPagePath()} exact>
+            <ChatPage />
+          </PrivateRoute>
+        </Switch>
+      </div>
+    </Router>
+  </AuthProvider>
 );
 
 export default App;
