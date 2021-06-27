@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import {
   Modal as BootstrapModal,
   Form,
@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 
 import { actions } from '../slices';
 import { getChannelById, getChannelsNames } from '../selectors';
+import useApi from '../hooks/useApi.jsx';
 
 const getValidationSchema = (channels) => yup.object().shape({
   name: yup
@@ -26,6 +27,8 @@ const AddChannelForm = ({ handleClose }) => {
   const channels = useSelector(getChannelsNames);
   const inputRef = useRef(null);
   const { t } = useTranslation();
+  const api = useApi();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     inputRef.current.focus();
@@ -38,6 +41,18 @@ const AddChannelForm = ({ handleClose }) => {
     validationSchema: getValidationSchema(channels),
     validateOnBlur: false,
     validateOnChange: false,
+    onSubmit: async ({ name }, { setSubmitting }) => {
+      const channel = { name };
+      try {
+        const data = await api.createChannel(channel);
+        dispatch(actions.setCurrentChannel({ channelId: data.id }));
+        handleClose();
+      } catch (e) {
+        setSubmitting(false);
+        inputRef.current.select();
+      }
+    },
+
   });
 
   return (
@@ -95,7 +110,17 @@ const AddChannelForm = ({ handleClose }) => {
 
 const RemoveChannelForm = ({ handleClose }) => {
   const { t } = useTranslation();
-  const handleRemove = () => {
+  const [loading, setLoading] = useState(false);
+  const api = useApi();
+  const channelId = useSelector((state) => state.modal.extra?.channelId);
+  const handleRemove = async () => {
+    setLoading(true);
+    try {
+      await api.removeChannel({ id: channelId });
+      handleClose();
+    } catch (e) {
+      setLoading(false);
+    }
   };
 
   return (
@@ -118,6 +143,7 @@ const RemoveChannelForm = ({ handleClose }) => {
             variant="secondary"
             type="button"
             onClick={handleClose}
+            disabled={loading}
           >
             {t('modals.cancel')}
           </Button>
@@ -125,6 +151,7 @@ const RemoveChannelForm = ({ handleClose }) => {
             variant="danger"
             type="button"
             onClick={handleRemove}
+            disabled={loading}
           >
             {t('modals.confirm')}
           </Button>
@@ -140,6 +167,7 @@ const RenameChannelForm = ({ handleClose }) => {
   const channelId = useSelector((state) => state.modal.extra?.channelId);
   const channel = useSelector(getChannelById(channelId));
   const inputRef = useRef(null);
+  const api = useApi();
   useEffect(() => {
     requestAnimationFrame(() => inputRef.current.select());
   }, []);
@@ -150,6 +178,20 @@ const RenameChannelForm = ({ handleClose }) => {
     validationSchema: getValidationSchema(channels),
     validateOnBlur: false,
     validateOnChange: false,
+    onSubmit: async ({ name }, { setSubmitting }) => {
+      const data = { name, id: channelId };
+
+      try {
+        await api.renameChannel(data);
+        handleClose();
+      } catch (e) {
+        setSubmitting(false);
+        inputRef.current.select();
+        if (!e.isAxiosError) {
+          throw e;
+        }
+      }
+    },
   });
 
   return (
