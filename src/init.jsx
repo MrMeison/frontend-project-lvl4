@@ -1,3 +1,4 @@
+import React from 'react';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import i18next from 'i18next';

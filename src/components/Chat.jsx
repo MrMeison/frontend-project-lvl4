@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { animateScroll } from 'react-scroll';
 import { useTranslation } from 'react-i18next';
