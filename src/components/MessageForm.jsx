@@ -4,10 +4,16 @@ import { ArrowRightSquare } from 'react-bootstrap-icons';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
+import useAuth from '../hooks/useAuth.jsx';
+import useApi from '../hooks/useApi.jsx';
 
 const MessageForm = ({ channel }) => {
   const { t } = useTranslation();
   const inputRef = useRef(null);
+
+  const auth = useAuth();
+  const api = useApi();
+  const { username } = auth.user;
 
   const validationSchema = yup.object().shape({
     body: yup
@@ -20,6 +26,19 @@ const MessageForm = ({ channel }) => {
     initialValues: { body: '' },
     validationSchema,
     validateOnBlur: false,
+    onSubmit: async ({ body }) => {
+      const message = {
+        body,
+        channelId: channel.id,
+        username,
+      };
+
+      await api.sendMessage(message);
+      f.resetForm();
+      f.setSubmitting(false);
+      inputRef.current.focus();
+    },
+
   });
 
   useEffect(() => {
