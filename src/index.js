@@ -16,15 +16,8 @@ const startApp = async () => {
     localStorage.debug = 'chat:*';
   }
 
-  const rollbarConfig = {
-    accessToken: process.env.ROLLBAR_TOKEN,
-    environment: process.env.NODE_ENV,
-    enabled: isProduction,
-  };
-
-  console.log('rollbarConfig', rollbarConfig);
   const element = document.querySelector('#chat');
-  const vdom = await init(io(), { rollbar: rollbarConfig });
+  const vdom = await init(io());
   ReactDOM.render(vdom, element);
 };
 

@@ -11,11 +11,12 @@ import { SOCKET_TIMEOUT, SocketStatus } from './constants';
 
 import App from './components/App.jsx';
 
-export default async (socket, { rollbar }) => {
+export default async (socket) => {
   const withSocketErrorHandler = (socketFunc) => (...args) => new Promise((resolve, reject) => {
     const state = {
       status: SocketStatus.Pending,
     };
+
     const timer = setTimeout(() => {
       state.status = SocketStatus.Reject;
       reject();
@@ -33,6 +34,13 @@ export default async (socket, { rollbar }) => {
       reject();
     });
   });
+
+  const isProduction = process.env.NODE_ENV === 'production';
+  const rollbarConfig = {
+    accessToken: process.env.ROLLBAR_TOKEN,
+    environment: process.env.NODE_ENV,
+    enabled: isProduction,
+  };
 
   const api = {
     sendMessage: withSocketErrorHandler((...args) => socket.volatile.emit('newMessage', ...args)),
@@ -74,7 +82,7 @@ export default async (socket, { rollbar }) => {
     <Provider store={store}>
       <I18nextProvider i18n={i18n}>
         <ApiContext.Provider value={api}>
-          <RollbarProvider config={rollbar}>
+          <RollbarProvider config={rollbarConfig}>
             <ErrorBoundary>
               <App />
             </ErrorBoundary>
