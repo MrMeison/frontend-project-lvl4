@@ -1,6 +1,6 @@
-# project-frontend-l4-server
+# project-frontend-lvl4
 
-[![Github Actions Status](https://github.com/hexlet-components/projects-frontend-l4-server/workflows/Node%20CI/badge.svg)](https://github.com/hexlet-components/projects-frontend-l4-server/actions)
+[![Github Actions Status](https://github.com/MrMeison/frontend-project-lvl4/workflows/Node%20CI/badge.svg)](https://github.com/MrMeison/frontend-project-lvl4/actions)
 
 ## Public beta
 URL: https://guarded-beach-22398.herokuapp.com/
