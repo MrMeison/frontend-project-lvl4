@@ -10,8 +10,21 @@ if (process.env.NODE_ENV !== 'production') {
   localStorage.debug = 'chat:*';
 }
 const startApp = async () => {
+  const isProduction = process.env.NODE_ENV === 'production';
+
+  if (!isProduction) {
+    localStorage.debug = 'chat:*';
+  }
+
+  const rollbarConfig = {
+    accessToken: process.env.ROLLBAR_TOKEN,
+    environment: process.env.NODE_ENV,
+    enabled: isProduction,
+  };
+
+  console.log('rollbarConfig', rollbarConfig);
   const element = document.querySelector('#chat');
-  const vdom = await init(io());
+  const vdom = await init(io(), { rollbar: rollbarConfig });
   ReactDOM.render(vdom, element);
 };
 

@@ -34,5 +34,18 @@ export default {
       rename: 'Rename',
       channels: 'Channels',
     },
+    signup: {
+      required: 'Required',
+      passMin: 'Min 6 characters',
+      mustMatch: 'Passwords must match',
+      username: 'Username',
+      usernameConstraints: '3 to 20 characters',
+      password: 'Password',
+      confirm: 'Confirm password',
+      alreadyExists: 'Username already taken',
+      submit: 'Submit',
+      header: 'Signup',
+    },
+
   },
 };

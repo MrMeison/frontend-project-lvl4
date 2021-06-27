@@ -2,14 +2,16 @@ import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import i18next from 'i18next';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
+import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 import resources from './locales/index.js';
 
 import reducer, { actions } from './slices/index.js';
-import App from './components/App.jsx';
 import ApiContext from './contexts/apiContext';
 import { SOCKET_TIMEOUT, SocketStatus } from './constants';
 
-export default async (socket) => {
+import App from './components/App.jsx';
+
+export default async (socket, { rollbar }) => {
   const withSocketErrorHandler = (socketFunc) => (...args) => new Promise((resolve, reject) => {
     const state = {
       status: SocketStatus.Pending,
@@ -68,15 +70,17 @@ export default async (socket) => {
       fallbackLng: 'ru',
     });
 
-  const vdom = (
+  return (
     <Provider store={store}>
       <I18nextProvider i18n={i18n}>
         <ApiContext.Provider value={api}>
-          <App />
+          <RollbarProvider config={rollbar}>
+            <ErrorBoundary>
+              <App />
+            </ErrorBoundary>
+          </RollbarProvider>
         </ApiContext.Provider>
       </I18nextProvider>
     </Provider>
   );
-
-  return vdom;
 };
