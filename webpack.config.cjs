@@ -24,10 +24,9 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin(),
-      new webpack.DefinePlugin({
-          'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-          'process.env.ROLLBAR_TOKEN': JSON.stringify(process.env.ROLLBAR_TOKEN),
-      }),
+    new webpack.DefinePlugin({
+      'process.env.ROLLBAR_TOKEN': JSON.stringify(process.env.ROLLBAR_TOKEN),
+    }),
   ],
   module: {
     rules: [
@@ -45,12 +44,12 @@ module.exports = {
           { loader: 'sass-loader' },
         ],
       },
-        {
-            test: /\.(png|jpe?g|gif)$/i,
-            use: {
-                loader: 'url-loader',
-            },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: {
+          loader: 'url-loader',
         },
+      },
     ],
   },
 };
